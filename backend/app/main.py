@@ -1,6 +1,10 @@
 import math
 import os
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
+from astral import LocationInfo
+from astral.sun import sun
 from fastapi import Depends, FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func, select
@@ -8,7 +12,7 @@ from sqlalchemy.orm import Session, selectinload
 
 from app.database import get_db
 from app.models import Post
-from app.schemas import PaginatedPosts
+from app.schemas import ChibaSunTimes, PaginatedPosts
 
 app = FastAPI(title="API")
 
@@ -25,6 +29,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+CHIBA_LOCATION = LocationInfo("Chiba", "Japan", "Asia/Tokyo", 35.6074, 140.1065)
+JST = ZoneInfo("Asia/Tokyo")
+
 
 @app.get("/health")
 def health() -> dict[str, str]:
@@ -34,6 +41,20 @@ def health() -> dict[str, str]:
 @app.get("/")
 def root() -> dict[str, str]:
     return {"message": "FastAPI is running"}
+
+
+@app.get("/chiba/sun-times", response_model=ChibaSunTimes)
+def chiba_sun_times() -> ChibaSunTimes:
+    today_jst = datetime.now(JST).date()
+    tomorrow_jst = today_jst + timedelta(days=1)
+
+    today_sun = sun(CHIBA_LOCATION.observer, date=today_jst, tzinfo=JST)
+    tomorrow_sun = sun(CHIBA_LOCATION.observer, date=tomorrow_jst, tzinfo=JST)
+
+    return ChibaSunTimes(
+        today_sunset=today_sun["sunset"],
+        tomorrow_sunrise=tomorrow_sun["sunrise"],
+    )
 
 
 @app.get("/posts", response_model=PaginatedPosts)
