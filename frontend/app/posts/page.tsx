@@ -106,16 +106,22 @@ export default function PostsPage() {
       {
         accessorKey: "thumbnail",
         header: "サムネイル",
-        cell: ({ getValue }) => (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={String(getValue())}
-            alt=""
-            width={96}
-            height={54}
-            className="rounded object-cover"
-          />
-        ),
+        cell: ({ getValue }) => {
+          const url = String(getValue() ?? "").trim();
+          if (!url) {
+            return <span className="text-neutral-500">—</span>;
+          }
+          return (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={url}
+              alt=""
+              width={96}
+              height={54}
+              className="rounded object-cover"
+            />
+          );
+        },
       },
       {
         id: "categories",
@@ -156,6 +162,9 @@ export default function PostsPage() {
     <div className="mx-auto max-w-[1400px] bg-white px-4 py-8 text-neutral-900">
       <div className="mb-4 flex flex-wrap items-baseline gap-4">
         <h1 className="text-xl font-semibold">投稿一覧</h1>
+        <Link href="/posts/add" className="text-sm text-blue-700 underline">
+          新規投稿
+        </Link>
         <Link href="/" className="text-sm text-blue-700 underline">
           トップへ
         </Link>

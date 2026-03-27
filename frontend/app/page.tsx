@@ -60,9 +60,14 @@ export default function Home() {
         </article>
       </section>
       <p className="text-2xl font-semibold tracking-tight">{message}</p>
-      <Link href="/posts" className="text-sm text-blue-700 underline">
-        投稿一覧へ
-      </Link>
+      <div className="flex items-center gap-4">
+        <Link href="/posts" className="text-sm text-blue-700 underline">
+          投稿一覧へ
+        </Link>
+        <Link href="/posts/add" className="text-sm text-blue-700 underline">
+          新規投稿へ
+        </Link>
+      </div>
     </main>
   );
 }

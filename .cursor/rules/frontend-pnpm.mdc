@@ -1,0 +1,16 @@
+---
+description: フロントエンド（frontend/）は pnpm のみ使用する
+globs: frontend/**/*
+alwaysApply: false
+---
+
+# フロントエンドのパッケージマネージャ
+
+- `frontend/` 配下では **pnpm のみ**を使う。`npm` / `yarn` で依存を追加・インストールしない。
+- ロックファイルは **`pnpm-lock.yaml` のみ**をコミットする。`package-lock.json` は作らない・残さない。
+- 依存を追加・更新するときの例:
+  - `cd frontend && pnpm add <pkg>`
+  - `cd frontend && pnpm add -D <pkg>`
+  - `pnpm install`（ロックに従う）
+- Node / pnpm のバージョンは **mise** で揃える（ルートの `.mise.toml`）。Volta だけに依存しない。
+- Docker のフロントは `frontend/Dockerfile` と `frontend/docker-entrypoint.sh` が **pnpm** を前提にしている。ロックを変えたらイメージ再ビルドまたは entrypoint 経由の `pnpm install` を意識する。

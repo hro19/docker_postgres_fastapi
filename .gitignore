@@ -7,3 +7,6 @@ __pycache__/
 venv/
 node_modules/
 .next/
+# フロントは pnpm 固定（誤って npm で生成したロックはコミットしない）
+frontend/package-lock.json
+frontend/.pnpm-store/

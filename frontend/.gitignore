@@ -2,6 +2,10 @@
 
 # dependencies
 /node_modules
+# 誤ってプロジェクト内に作られた pnpm ストア（再生成しない）
+/.pnpm-store
+# npm 由来の残骸（pnpm が移動したフォルダ）
+node_modules/.ignored
 /.pnp
 .pnp.*
 .yarn/*

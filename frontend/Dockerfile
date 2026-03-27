@@ -2,8 +2,10 @@ FROM node:22-bookworm-slim
 
 WORKDIR /app
 
-COPY package.json package-lock.json ./
-RUN npm ci
+RUN corepack enable && corepack prepare pnpm@9.15.4 --activate
+
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
@@ -15,4 +17,5 @@ ENV NEXT_TELEMETRY_DISABLED=1
 EXPOSE 3000
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
-CMD ["npm", "run", "dev", "--", "--hostname", "0.0.0.0", "--port", "3000"]
+# pnpm run dev -- … だと「--」が next に渡り /app/--hostname 扱いになるため、直接 next を起動する
+CMD ["pnpm", "exec", "next", "dev", "--turbopack", "--hostname", "0.0.0.0", "--port", "3000"]
