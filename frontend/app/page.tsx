@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const apiBase =
@@ -16,8 +17,11 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-white p-8 text-neutral-900">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-white p-8 text-neutral-900">
       <p className="text-2xl font-semibold tracking-tight">{message}</p>
+      <Link href="/posts" className="text-sm text-blue-700 underline">
+        投稿一覧へ
+      </Link>
     </main>
   );
 }

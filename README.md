@@ -13,8 +13,9 @@ cp .env.example .env   # 任意
 docker compose up --build
 ```
 
-- Next.js: http://localhost:3000  
+- Next.js: http://localhost:3000（投稿一覧: http://localhost:3000/posts）  
 - FastAPI OpenAPI: http://localhost:8000/docs  
+- 投稿 API（ページング）: `GET /posts?page=1&perPage=10`（`perPage` は 1〜100、既定 10）  
 - PostgreSQL: ホストから `localhost:${POSTGRES_PORT:-5432}`（`.env` で変更可）
 
 ## 構成

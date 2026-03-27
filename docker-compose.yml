@@ -24,7 +24,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-app}:${POSTGRES_PASSWORD:-app}@db:5432/${POSTGRES_DB:-app}
       CORS_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
     volumes:
-      - ./backend/app:/app/app
+      - ./backend:/app
     depends_on:
       db:
         condition: service_healthy
