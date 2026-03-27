@@ -32,4 +32,7 @@ docker compose up --build
 ## 開発メモ
 
 - 依存を変えたらイメージの再ビルドが必要です: `docker compose build --no-cache` など。
+- フロントの `package-lock.json` を更新したあと、コンテナ起動時に **`npm ci` が自動実行**されます（`frontend/docker-entrypoint.sh`）。それでも解消しない場合はボリュームを捨ててから再ビルドしてください:  
+  `docker volume rm docker_postgres_fastapi_frontend_node_modules`（プロジェクト名が違う場合は `docker volume ls` で名前を確認）。
+- ホストで直接 `next build` する場合は、リポジトリ直下で `cd frontend && npm install` 済みである必要があります。
 - DB のデータは名前付きボリューム `pgdata` に保持されます。

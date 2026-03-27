@@ -7,6 +7,8 @@ import {
   type ColumnDef,
   type PaginationState,
 } from "@tanstack/react-table";
+import { formatDateTimeJst } from "@/lib/formatDate";
+import { buildVisiblePageIndices } from "@/lib/paginationRange";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -123,14 +125,12 @@ export default function PostsPage() {
       {
         accessorKey: "created_at",
         header: "作成日時",
-        cell: ({ getValue }) =>
-          new Date(String(getValue())).toLocaleString("ja-JP"),
+        cell: ({ getValue }) => formatDateTimeJst(String(getValue())),
       },
       {
         accessorKey: "edited_at",
         header: "更新日時",
-        cell: ({ getValue }) =>
-          new Date(String(getValue())).toLocaleString("ja-JP"),
+        cell: ({ getValue }) => formatDateTimeJst(String(getValue())),
       },
     ],
     [],
@@ -146,6 +146,11 @@ export default function PostsPage() {
     onPaginationChange: setPagination,
     state: { pagination },
   });
+
+  const pageNumberItems = useMemo(
+    () => buildVisiblePageIndices(pagination.pageIndex, pageCount),
+    [pagination.pageIndex, pageCount],
+  );
 
   return (
     <div className="mx-auto max-w-[1400px] bg-white px-4 py-8 text-neutral-900">
@@ -262,6 +267,39 @@ export default function PostsPage() {
           >
             前へ
           </button>
+          <nav
+            className="flex items-center gap-1"
+            aria-label="ページ番号"
+          >
+            {pageNumberItems.map((item, idx) =>
+              item === "ellipsis" ? (
+                <span
+                  key={`gap-${idx}`}
+                  className="px-1 text-neutral-400"
+                  aria-hidden
+                >
+                  …
+                </span>
+              ) : (
+                <button
+                  key={item}
+                  type="button"
+                  className={
+                    pagination.pageIndex === item
+                      ? "min-w-8 rounded border border-blue-600 bg-blue-50 px-2 py-1 font-medium text-blue-800"
+                      : "min-w-8 rounded border border-neutral-300 bg-white px-2 py-1 hover:bg-neutral-50"
+                  }
+                  onClick={() => table.setPageIndex(item)}
+                  aria-label={`${item + 1} ページ目`}
+                  aria-current={
+                    pagination.pageIndex === item ? "page" : undefined
+                  }
+                >
+                  {item + 1}
+                </button>
+              ),
+            )}
+          </nav>
           <button
             type="button"
             className="rounded border border-neutral-300 px-2 py-1 disabled:opacity-40"
