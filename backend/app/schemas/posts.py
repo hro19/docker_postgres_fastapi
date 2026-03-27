@@ -28,8 +28,3 @@ class PaginatedPosts(BaseModel):
     page: int
     per_page: int
     total_pages: int
-
-
-class ChibaSunTimes(BaseModel):
-    today_sunset: datetime
-    tomorrow_sunrise: datetime
